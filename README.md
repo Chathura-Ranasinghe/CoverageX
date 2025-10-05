@@ -380,9 +380,9 @@ Chathura Ranasinghe
 ## 📸 Screenshots
 
 ### Application Interface
-![Application UI](./src/assets/task_app_screenshot.jpeg)
+![Application UI](./frontend/src/assets/task_app_screenshot.jpeg)
 *Todo application interface showing task creation form and task list with theme toggle*
 
 ### Docker Desktop
-![Docker Desktop Running](./src/assets/docker.png)
+![Docker Desktop Running](./frontend/src/assets/docker.png)
 *All services running successfully in Docker Desktop*
