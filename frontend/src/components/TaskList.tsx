@@ -10,6 +10,7 @@ import { Button } from "./ui/button";
 import { useTaskStore } from "../store/taskStore";
 import { CheckCircle2, Clock, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import { ScrollArea } from "./ui/scroll-area"; // ✅ Import shadcn scroll-area
 
 export const TaskList: React.FC = () => {
   const { tasks, loading, error, completeTask, fetchTasks } = useTaskStore();
@@ -72,38 +73,43 @@ export const TaskList: React.FC = () => {
         <CardTitle>Recent Tasks</CardTitle>
         <CardDescription>Your 5 most recent incomplete tasks</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {tasks.map((task) => (
-          <div
-            key={task.id}
-            className="flex items-center justify-between p-4 border rounded-lg"
-          >
-            <div className="flex-1">
-              <h3 className="font-semibold text-lg">{task.title}</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                {task.description}
-              </p>
-              <p className="text-xs text-muted-foreground mt-2">
-                Created: {new Date(task.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-            <Button
-              onClick={async () => {
-                try {
-                  await completeTask(task.id);
-                  toast.success("Task marked as done!");
-                } catch {
-                  toast.error("Failed to complete task.");
-                }
-              }}
-              disabled={loading}
-              variant="outline"
-              className="ml-4"
-            >
-              {loading ? "..." : "Done"}
-            </Button>
+      <CardContent className="p-0"> 
+        {/* ✅ Wrap with ScrollArea */}
+        <ScrollArea className="h-96 px-6"> 
+          <div className="space-y-4 py-4">
+            {tasks.map((task) => (
+              <div
+                key={task.id}
+                className="flex items-center justify-between p-4 border rounded-lg"
+              >
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{task.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {task.description}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Created: {new Date(task.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <Button
+                  onClick={async () => {
+                    try {
+                      await completeTask(task.id);
+                      toast.success("Task marked as done!");
+                    } catch {
+                      toast.error("Failed to complete task.");
+                    }
+                  }}
+                  disabled={loading}
+                  variant="outline"
+                  className="ml-4"
+                >
+                  {loading ? "..." : "Done"}
+                </Button>
+              </div>
+            ))}
           </div>
-        ))}
+        </ScrollArea>
       </CardContent>
     </Card>
   );
