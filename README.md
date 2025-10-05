@@ -2,17 +2,7 @@
 
 A modern, full-stack todo application built with React, TypeScript, Express, and PostgreSQL. This project demonstrates clean architecture principles, comprehensive testing, and containerized deployment.
 
-## 🏗️ Architecture
-
-```
-┌─────────────┐      ┌─────────────┐      ┌─────────────┐
-│   Frontend  │ ───► │   Backend   │ ───► │  PostgreSQL │
-│   (React)   │      │  (Express)  │      │  Database   │
-│   Port 80   │      │  Port 3000  │      │  Port 5432  │
-└─────────────┘      └─────────────┘      └─────────────┘
-```
-
-### Components
+## 🏗️ Tech Stack
 
 - **Frontend**: React 19 + TypeScript + Tailwind CSS + shadcn/ui
 - **Backend**: Express.js + TypeScript + Prisma ORM
@@ -23,58 +13,61 @@ A modern, full-stack todo application built with React, TypeScript, Express, and
 
 ## ✨ Features
 
-- ✅ Create todo tasks with title and description
+- ✅ Create, view, and complete todo tasks
 - ✅ View 5 most recent incomplete tasks
-- ✅ Mark tasks as completed
-- ✅ Real-time updates
+- ✅ Real-time updates with optimistic UI
 - ✅ Dark/Light theme toggle
 - ✅ Responsive design
-- ✅ Form validation
-- ✅ Error handling with toast notifications
+- ✅ Form validation with error handling
+- ✅ Toast notifications
 - ✅ 100% backend test coverage
 - ✅ Comprehensive frontend test coverage
 
 ## 📋 Prerequisites
 
+### Required
 - **Docker** (v20.10 or higher)
 - **Docker Compose** (v2.0 or higher)
 - **Git**
 
-For local development without Docker:
+### For Local Development (Optional)
 - Node.js 22+
 - PostgreSQL 17+
 
-## 🚀 Quick Start
+## 🚀 Quick Start with Docker (Recommended)
 
-### Using Docker (Recommended)
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Chathura-Ranasinghe/CoverageX
+cd CoverageX
+```
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Chathura-Ranasinghe/CoverageX
-   cd CoverageX
-   ```
+### 2. Start All Services
+```bash
+docker-compose up --build
+```
 
-2. **Start all services**
-   ```bash
-   docker-compose up --build
-   ```
+This command will:
+- Build the frontend, backend, and database containers
+- Start all services
+- Run database migrations automatically
+- Make the application available at http://localhost
 
-3. **Access the application**
-   - Frontend: http://localhost
-   - Backend API: http://localhost:3000/api
-   - Database: localhost:5433
+### 3. Access the Application
+- **Frontend**: http://localhost
+- **Backend API**: http://localhost:3000/api
+- **Database**: localhost:5433
 
-4. **Stop the services**
-   ```bash
-   docker-compose down
-   ```
+### 4. Stop the Services
+```bash
+# Stop containers (keeps data)
+docker-compose down
 
-5. **Clean up (remove volumes)**
-   ```bash
-   docker-compose down -v
-   ```
+# Stop and remove all data
+docker-compose down -v
+```
 
-## 🛠️ Local Development Setup
+## 🛠️ Local Development Setup (Without Docker)
 
 ### Backend Setup
 
@@ -84,31 +77,43 @@ cd backend
 # Install dependencies
 npm install
 
-# Set up environment variables
+# Create environment file
 cp .env.example .env
+```
 
-# Start PostgreSQL (using Docker)
+**Edit `.env` file:**
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/todo_db?schema=public"
+PORT=3000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
+```
+
+**Start PostgreSQL using Docker:**
+```bash
 docker run -d \
   --name postgres-dev \
   -e POSTGRES_PASSWORD=postgres \
   -e POSTGRES_DB=todo_db \
   -p 5433:5432 \
   postgres:17-alpine
+```
 
-# Run database migrations
+**Run database migrations:**
+```bash
 npx prisma migrate dev
-
-# Generate Prisma Client
 npx prisma generate
+```
 
-# Start development server
+**Start the development server:**
+```bash
 npm run dev
+```
 
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
+**Run tests:**
+```bash
+npm test                 # Run all tests with coverage
+npm run test:watch       # Watch mode
 ```
 
 ### Frontend Setup
@@ -119,18 +124,83 @@ cd frontend
 # Install dependencies
 npm install
 
-# Set up environment variables
+# Create environment file
 cp .env.example .env
-
-# Start development server
-npm run dev
-
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
 ```
+
+**Edit `.env` file:**
+```env
+VITE_API_URL=http://localhost:3000/api
+```
+
+**Start the development server:**
+```bash
+npm run dev
+```
+
+**Run tests:**
+```bash
+npm test                 # Run all tests with coverage
+npm run test:watch       # Watch mode
+npm run test:ci          # CI mode
+```
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| GET | `/health` | Health check | - |
+| POST | `/api/tasks` | Create a new task | `{ "title": "string", "description": "string" }` |
+| GET | `/api/tasks` | Get 5 most recent incomplete tasks | - |
+| PATCH | `/api/tasks/:id/complete` | Mark task as completed | - |
+
+### Example API Requests
+
+**Create a Task:**
+```bash
+curl -X POST http://localhost:3000/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Buy groceries","description":"Milk, eggs, bread"}'
+```
+
+**Get Tasks:**
+```bash
+curl http://localhost:3000/api/tasks
+```
+
+**Complete a Task:**
+```bash
+curl -X PATCH http://localhost:3000/api/tasks/1/complete
+```
+
+## 🧪 Testing
+
+### Backend Tests (100% Coverage)
+```bash
+cd backend
+npm test                 # Run all tests with coverage
+npm run test:watch       # Watch mode for development
+```
+
+**Test Coverage Includes:**
+- Unit tests for controllers, services, and repositories
+- Integration tests for API endpoints
+- Validation tests with Zod schemas
+- Error handling and edge cases
+
+### Frontend Tests
+```bash
+cd frontend
+npm test                 # Run all tests with coverage
+npm run test:watch       # Watch mode
+npm run test:ci          # CI mode (no watch)
+```
+
+**Test Coverage Includes:**
+- Component rendering and interactions
+- State management (Zustand store)
+- User interactions and form submissions
+- Error handling and loading states
 
 ## 📁 Project Structure
 
@@ -139,7 +209,7 @@ npm run test:watch
 ├── backend/
 │   ├── src/
 │   │   ├── __tests__/           # Test files
-│   │   │   ├── integration/     # Integration tests
+│   │   │   ├── integration/     # API integration tests
 │   │   │   ├── controllers/     # Controller unit tests
 │   │   │   ├── services/        # Service unit tests
 │   │   │   └── repositories/    # Repository tests
@@ -152,6 +222,7 @@ npm run test:watch
 │   │   ├── app.ts               # Express app setup
 │   │   └── index.ts             # Entry point
 │   ├── prisma/
+│   │   ├── migrations/          # Database migrations
 │   │   └── schema.prisma        # Database schema
 │   ├── Dockerfile
 │   ├── package.json
@@ -164,188 +235,137 @@ npm run test:watch
 │   │   │   └── store/           # Store tests
 │   │   ├── components/          # React components
 │   │   │   ├── ui/              # shadcn/ui components
-│   │   │   ├── TaskForm.tsx
-│   │   │   ├── TaskList.tsx
-│   │   │   └── mode-toggle.tsx
+│   │   │   ├── TaskForm.tsx     # Task creation form
+│   │   │   ├── TaskList.tsx     # Task list display
+│   │   │   └── mode-toggle.tsx  # Theme toggle
 │   │   ├── lib/                 # Utilities
-│   │   │   ├── api.ts           # API client
+│   │   │   ├── api.ts           # Axios API client
 │   │   │   ├── utils.ts         # Helper functions
 │   │   │   └── validators.ts    # Zod schemas
 │   │   ├── store/               # Zustand store
 │   │   ├── types/               # TypeScript types
 │   │   ├── App.tsx              # Main app component
-│   │   ├── main.tsx             # Entry point
-│   │   └── setupTests.ts        # Test configuration
+│   │   └── main.tsx             # Entry point
 │   ├── Dockerfile
-│   ├── nginx.conf
+│   ├── nginx.conf               # Nginx configuration
 │   ├── jest.config.ts
 │   ├── package.json
 │   └── tsconfig.json
 │
-└── docker-compose.yml
-```
-
-## 🧪 Testing
-
-### Backend Tests
-
-The backend has **100% test coverage** including:
-- Unit tests for controllers, services, and repositories
-- Integration tests for API endpoints
-- Validation tests
-- Error handling tests
-
-```bash
-cd backend
-npm test                 # Run all tests with coverage
-npm run test:watch       # Watch mode
-```
-
-### Frontend Tests
-
-Comprehensive test coverage including:
-- Component tests
-- Store/state management tests
-- User interaction tests
-- Error handling tests
-
-```bash
-cd frontend
-npm test                 # Run all tests with coverage
-npm run test:watch       # Watch mode
-npm run test:ci          # CI mode
-```
-
-## 🔌 API Endpoints
-
-### Tasks
-
-- **POST** `/api/tasks` - Create a new task
-  ```json
-  {
-    "title": "Task title",
-    "description": "Task description"
-  }
-  ```
-
-- **GET** `/api/tasks` - Get 5 most recent incomplete tasks
-
-- **PATCH** `/api/tasks/:id/complete` - Mark task as completed
-
-### Health Check
-
-- **GET** `/health` - Health check endpoint
-
-## 🎨 Design Decisions
-
-### Backend Architecture
-
-- **Layered Architecture**: Controller → Service → Repository pattern
-- **Dependency Injection**: Loose coupling through constructor injection
-- **Repository Pattern**: Data access abstraction for easier testing and maintenance
-- **DTO Pattern**: Separate data transfer objects from domain models
-- **Zod Validation**: Runtime type checking and validation
-- **Prisma ORM**: Type-safe database access
-
-### Frontend Architecture
-
-- **Component-Based**: Reusable, testable components
-- **Zustand State Management**: Simple, performant global state
-- **React Hook Form**: Efficient form handling with validation
-- **shadcn/ui**: Accessible, customizable component library
-- **Axios**: HTTP client with interceptor support
-- **Tailwind CSS**: Utility-first styling
-
-### Testing Strategy
-
-- **Backend**: 100% coverage with unit and integration tests
-- **Frontend**: High coverage focusing on user interactions
-- **Mocking**: Strategic mocking for isolation
-- **Integration Tests**: Real database interactions for confidence
-
-## 🔐 Environment Variables
-
-### Backend (.env)
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5433/todo_db?schema=public"
-PORT=3000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
-```
-
-### Frontend (.env)
-```env
-VITE_API_URL=http://localhost:3000/api
+└── docker-compose.yml           # Docker orchestration
 ```
 
 ## 🐳 Docker Configuration
 
-### Multi-stage Builds
-Both frontend and backend use multi-stage Docker builds for:
-- Smaller image sizes
-- Faster builds
-- Separation of build and runtime environments
+### Services Architecture
 
-### Networks
-All services communicate through a custom bridge network for:
-- Service discovery
-- Network isolation
-- Better security
+```
+┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+│   Frontend      │ ───► │   Backend       │ ───► │  PostgreSQL     │
+│   (Nginx)       │      │   (Express)     │      │  Database       │
+│   Port 80       │      │   Port 3000     │      │   Port 5432     │
+└─────────────────┘      └─────────────────┘      └─────────────────┘
+```
 
-### Health Checks
-- Database has health checks to ensure it's ready before backend starts
-- Proper dependency management with `depends_on`
+### Key Features
+- **Multi-stage builds** for optimized image sizes
+- **Health checks** for service dependencies
+- **Custom bridge network** for service communication
+- **Volume persistence** for database data
+- **Automatic migrations** on backend startup
 
-## 🚦 CI/CD Considerations
+### Customizing Ports
 
-The project is ready for CI/CD with:
-- Dockerized builds
-- Automated tests
-- Coverage thresholds
-- Lint checks
-- Health check endpoints
+If default ports are in use, edit `docker-compose.yml`:
 
-## 📝 Development Workflow
-
-1. Create feature branch
-2. Make changes
-3. Run tests locally
-4. Build Docker containers
-5. Test with Docker Compose
-6. Submit pull request
+```yaml
+services:
+  frontend:
+    ports:
+      - "8080:80"      # Change 8080 to your preferred port
+  
+  backend:
+    ports:
+      - "3001:3000"    # Change 3001 to your preferred port
+  
+  db:
+    ports:
+      - "5434:5432"    # Change 5434 to your preferred port
+```
 
 ## 🔧 Troubleshooting
 
-### Port Conflicts
-If ports are already in use:
+### Port Already in Use
 ```bash
-# Change ports in docker-compose.yml
-ports:
-  - "8080:80"      # Frontend
-  - "3001:3000"    # Backend
-  - "5434:5432"    # Database
+# Check what's using the port
+lsof -i :80        # Linux/Mac
+netstat -ano | findstr :80   # Windows
+
+# Change ports in docker-compose.yml or stop the conflicting service
 ```
 
 ### Database Connection Issues
 ```bash
-# Reset database
+# Reset database and restart
 docker-compose down -v
 docker-compose up -d db
-docker-compose up backend
+# Wait for database to be ready
+docker-compose up backend frontend
 ```
 
-### Frontend not connecting to backend
-- Ensure VITE_API_URL is set correctly
-- Check CORS settings in backend
-- Verify backend is running
+### Frontend Not Loading
+- Verify backend is running: `curl http://localhost:3000/health`
+- Check browser console for errors
+- Ensure CORS is configured correctly in backend
+- Verify `VITE_API_URL` in frontend `.env`
+
+### Container Build Fails
+```bash
+# Clean Docker cache
+docker-compose down -v
+docker system prune -a
+docker-compose up --build
+```
+
+### Tests Failing
+```bash
+# Backend tests
+cd backend
+rm -rf node_modules package-lock.json
+npm install
+npm test
+
+# Frontend tests
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+npm test
+```
+
+## 🎯 Architecture Decisions
+
+### Backend
+- **Layered Architecture**: Controller → Service → Repository pattern for separation of concerns
+- **Dependency Injection**: Loose coupling through constructor injection
+- **Repository Pattern**: Data access abstraction for easier testing
+- **Zod Validation**: Runtime type checking and validation
+- **Prisma ORM**: Type-safe database queries
+
+### Frontend
+- **Component-Based**: Reusable, testable React components
+- **Zustand**: Lightweight state management
+- **React Hook Form**: Performant form handling
+- **shadcn/ui**: Accessible, customizable components
+- **Tailwind CSS**: Utility-first styling
 
 ## 📚 Additional Resources
 
 - [React Documentation](https://react.dev/)
-- [Express Documentation](https://expressjs.com/)
+- [Express.js Documentation](https://expressjs.com/)
 - [Prisma Documentation](https://www.prisma.io/docs)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [shadcn/ui](https://ui.shadcn.com/)
+- [Docker Documentation](https://docs.docker.com/)
 
 ## 📄 License
 
@@ -355,6 +375,14 @@ MIT
 
 Chathura Ranasinghe
 
-## 🙏 Acknowledgments
+---
 
-Built as part of the Full Stack Engineer Take Home Assessment.
+## 📸 Screenshots
+
+### Application Interface
+![Application UI](./src/assets/task_app_screenshot.jpeg)
+*Todo application interface showing task creation form and task list with theme toggle*
+
+### Docker Desktop
+![Docker Desktop Running](./src/assets/docker.png)
+*All services running successfully in Docker Desktop*
