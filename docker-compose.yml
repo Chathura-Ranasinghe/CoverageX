@@ -43,6 +43,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: todo-frontend
+    environment:
+      VITE_API_URL: http://localhost:3000/api
     ports:
       - "80:80"
     depends_on:
