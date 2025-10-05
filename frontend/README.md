@@ -1,73 +1,82 @@
-# React + TypeScript + Vite
+# Task Management Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React task management application with TypeScript, Zustand state management, and a beautiful UI powered by shadcn/ui and Tailwind CSS.
 
-Currently, two official plugins are available:
+![Todo App Interface](./src/assets/task_app_screenshot.jpeg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- Create and manage tasks with form validation
+- Mark tasks as complete
+- Dark/Light theme toggle
+- Responsive design
+- Toast notifications
+- Comprehensive test coverage (80%+)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19** + **TypeScript**
+- **Zustand** - State management
+- **React Hook Form** + **Zod** - Form handling & validation
+- **Tailwind CSS v4** + **shadcn/ui** - Styling
+- **Axios** - HTTP client
+- **Jest** + **React Testing Library** - Testing
+- **Vite** - Build tool
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Install dependencies
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Set up environment variables
+echo "VITE_API_URL=http://localhost:3000/api" > .env
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Available Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm test             # Run tests with coverage
+npm run test:watch   # Run tests in watch mode
+npm run lint         # Lint code
 ```
+
+## Docker Deployment
+
+```bash
+# Build and run
+docker build -t todo-frontend .
+docker run -p 80:80 todo-frontend
+
+# Or use docker-compose (from project root)
+docker-compose up
+```
+
+## Project Structure
+
+```
+src/
+├── components/         # React components
+│   ├── ui/            # shadcn/ui components
+│   ├── TaskForm.tsx
+│   └── TaskList.tsx
+├── store/             # Zustand stores
+├── lib/               # API client & utilities
+├── types/             # TypeScript types
+└── __tests__/         # Test files
+```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_API_URL` | Backend API URL | `http://localhost:3000/api` |
+
+## License
+
+MIT
