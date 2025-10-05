@@ -267,9 +267,10 @@ npm run test:ci          # CI mode
 
 ### Backend (.env)
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5433/todo_db?schema=public
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/todo_db?schema=public"
 PORT=3000
 NODE_ENV=development
+FRONTEND_URL=http://localhost:5173
 ```
 
 ### Frontend (.env)
