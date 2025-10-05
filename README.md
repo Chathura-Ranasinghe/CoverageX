@@ -50,8 +50,8 @@ For local development without Docker:
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd todo-app
+   git clone https://github.com/Chathura-Ranasinghe/CoverageX
+   cd CoverageX
    ```
 
 2. **Start all services**
