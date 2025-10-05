@@ -353,7 +353,7 @@ MIT
 
 ## 👤 Author
 
-Your Name
+Chathura Ranasinghe
 
 ## 🙏 Acknowledgments
 
